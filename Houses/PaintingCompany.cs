@@ -9,10 +9,13 @@ namespace Houses
     public class PaintingCompany : IPainter
     {
         private IEnumerable<IPainter> painters;
+        private IPaintingScheduler scheduler;
 
-        public PaintingCompany(IEnumerable<IPainter> painters)
+        public PaintingCompany(IEnumerable<IPainter> painters,
+                                IPaintingScheduler scheduler)
         {
             this.painters = new List<IPainter>(painters);
+            this.scheduler = scheduler;
         }
 
         public double Paint(double houses)
@@ -20,20 +23,9 @@ namespace Houses
             double totalVelocity = this.GetOverallVelocity();
 
             double totalDays =
-                this.painters
-                .Select(painter =>
-                    new
-                    {
-                        Painter = painter,
-                        Velocity = 1 / (double)painter.EstimateDays(1)
-                    })
-                .Select(record =>
-                    new
-                    {
-                        Painter = record.Painter,
-                        HousesToPaint = houses * record.Velocity / totalVelocity
-                    })
-                .Select(record => record.Painter.Paint(record.HousesToPaint))
+                this.scheduler
+                .Organize(this.painters, houses)
+                .Select(record => record.Item1.Paint(record.Item2))
                 .Max();
             return totalDays;
         }
@@ -49,7 +41,11 @@ namespace Houses
 
         public double EstimateDays(double houses)
         {
-            return houses / this.GetOverallVelocity();
+            return
+                this.scheduler
+                .Organize(this.painters, houses)
+                .Select(pair => pair.Item1.EstimateDays(pair.Item2))
+                .Max();
         }
     }
 }

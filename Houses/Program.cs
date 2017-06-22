@@ -10,13 +10,14 @@ namespace Houses
     {
         static void Main(string[] args)
         {
+            IPaintingScheduler scheduler = new ProportionalScheduler();
             IPainter localPintersCo =
                 new PaintingCompany(
                     new IPainter[]
                     {
                         new Painter("Andy",7),
                         new Painter("Bill",5)
-                    });
+                    }, scheduler);
 
             IPainter bestPaintersCo =
                 new PaintingCompany(
@@ -26,7 +27,7 @@ namespace Houses
                         new Painter("Jill",5),
                         new Painter("Buster",3),
                         localPintersCo
-                    });
+                    }, scheduler);
 
 
             LandOwner owner = new LandOwner(14, bestPaintersCo);

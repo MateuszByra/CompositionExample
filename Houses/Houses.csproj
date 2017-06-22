@@ -43,11 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPainter.cs" />
+    <Compile Include="IPaintingScheduler.cs" />
     <Compile Include="LandOwner.cs" />
     <Compile Include="Painter.cs" />
     <Compile Include="PaintingCompany.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProportionalScheduler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
